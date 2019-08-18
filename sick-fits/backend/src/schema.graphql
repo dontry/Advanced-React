@@ -22,7 +22,7 @@ type Mutation {
 type Query {
   hi: String
   dogs: [Dog!]!
-  item: [Item]!
+  items: [Item]!
 }
 
 type Dog {
