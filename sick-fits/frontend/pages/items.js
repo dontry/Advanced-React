@@ -11,6 +11,8 @@ const FETCH_ALL_ITEMS = gql`
       title
       description
       price
+      image
+      largeImage
     }
   }
 `;

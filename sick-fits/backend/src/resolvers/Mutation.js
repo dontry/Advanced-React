@@ -6,7 +6,7 @@ const Mutations = {
     return newDog;
   },
   async createItem(parent, args, ctx, info) {
-    const { title, description, price } = args.data;
+    const { title, description, price, image, largeImage } = args.data;
     console.log(args);
 
     const item = await ctx.db.mutation.createItem(
@@ -14,7 +14,9 @@ const Mutations = {
         data: {
           title,
           description,
-          price
+          price,
+          image,
+          largeImage
         }
       },
       info
