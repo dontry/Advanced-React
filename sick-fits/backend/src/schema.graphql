@@ -4,25 +4,20 @@ type User {
   name: String!
 }
 
-input ItemCreateInput {
-  id: ID
-  title: String!
-  description: String!
-  image: String
-  largeImage: String
-  price: Int!
-}
-
 type Mutation {
   hi: String
   createDog(name: String!): Dog
   createItem(data: ItemCreateInput): Item!
+  updateItem(data: ItemUpdateInput, where: ItemWhereUniqueInput!): Item
+  deleteItem(where: ItemWhereUniqueInput!): Item
 }
 
+# use the argument types from prisma.graphql
 type Query {
   hi: String
   dogs: [Dog!]!
   items: [Item]!
+  item(where: ItemWhereUniqueInput!): Item
 }
 
 type Dog {

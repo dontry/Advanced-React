@@ -6,7 +6,9 @@ const Query = {
   // async items(parent, args, ctx, info) {
   //   return await ctx.db.query.items({ where: {} });
   // }
-  items: forwardTo("db")
+  //make use of the prisma built-in api
+  items: forwardTo("db"),
+  item: forwardTo("db")
 };
 
 module.exports = Query;
