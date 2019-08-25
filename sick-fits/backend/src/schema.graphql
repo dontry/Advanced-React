@@ -10,13 +10,19 @@ type Mutation {
   createItem(data: ItemCreateInput): Item!
   updateItem(data: ItemUpdateInput, where: ItemWhereUniqueInput!): Item
   deleteItem(where: ItemWhereUniqueInput!): Item
+  signup(name: String!, email: String!, password: String!): User
 }
 
 # use the argument types from prisma.graphql
 type Query {
   hi: String
   dogs: [Dog!]!
-  items(where: ItemWhereInput, ItemOrderByInput, skip: Int, first: Int): [Item]!
+  items(
+    where: ItemWhereInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    first: Int
+  ): [Item]!
   item(where: ItemWhereUniqueInput!): Item
   itemsConnection(
     where: ItemWhereInput
@@ -27,8 +33,8 @@ type Query {
     first: Int
     last: Int
   ): ItemConnection!
+  me: User
 }
-
 type Dog {
   name: String!
 }
