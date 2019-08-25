@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import Router from "next/router";
 import Form from "./styles/Form";
 import formatMoney from "../lib/formatMoney";
+import { ALL_ITEMS_QUERY } from "./Items";
 import Error from "./ErrorMessage";
 
 const CREATE_ITEM_MUTATION = gql`
@@ -79,7 +80,10 @@ class CreateItem extends Component {
   render() {
     const { title, description, price, image } = this.state;
     return (
-      <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
+      <Mutation
+        refetchQueries={[{ query: ALL_ITEMS_QUERY }]}
+        mutation={CREATE_ITEM_MUTATION}
+        variables={this.state}>
         {(createItem, { loading, error }) => (
           <Form onSubmit={this.handleSubmit(createItem)}>
             <Error error={error} />

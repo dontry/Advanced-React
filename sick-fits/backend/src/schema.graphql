@@ -16,8 +16,17 @@ type Mutation {
 type Query {
   hi: String
   dogs: [Dog!]!
-  items: [Item]!
+  items(where: ItemWhereInput, ItemOrderByInput, skip: Int, first: Int): [Item]!
   item(where: ItemWhereUniqueInput!): Item
+  itemsConnection(
+    where: ItemWhereInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ItemConnection!
 }
 
 type Dog {
