@@ -16,6 +16,7 @@ server.express.use((req, res, next) => {
     const { userId } = jwt.verify(toke, process.env.APP_SECRET);
     req.userId = userId;
   }
+  next();
 });
 
 // TODO: populate current user
