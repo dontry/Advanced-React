@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/mccoy018/new-sick-fits/dev
-# timestamp: Sun Aug 25 2019 15:19:46 GMT+1000 (Australian Eastern Standard Time)
+# timestamp: Mon Aug 26 2019 23:44:18 GMT+1000 (Australian Eastern Standard Time)
 
 type AggregateItem {
   count: Int!
@@ -822,4 +822,5 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
+  email: String
 }

@@ -1,8 +1,4 @@
 # import * from './generated/prisma.graphql'
-type User {
-  id: ID!
-  name: String!
-}
 
 type SuccessMessage {
   message: String!

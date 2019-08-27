@@ -3,10 +3,11 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import Form from "./styles/Form";
 import Error from "./ErrorMessage";
+import { CURRENT_USER_QUERY } from "./User";
 
 export const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
-    signin(name: $name, password: $password) {
+    signin(email: $email, password: $password) {
       id
       email
       name
@@ -40,12 +41,12 @@ class Signin extends Component {
               <h2>Sign In with your account</h2>
               <Error error={error} />
               <label htmlFor="name">
-                Name
+                Email
                 <input
-                  type="text"
-                  name="name"
-                  placeholder="name"
-                  value={this.state.name}
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                  value={this.state.email}
                   onChange={this.saveToState}
                 />
               </label>
