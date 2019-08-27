@@ -11,5 +11,5 @@ add environment variables to variables.env files
 Use own .env file
 
 ```sh
-prisma deploy --env-file variable.env
+prisma deploy --env-file variables.env
 ```

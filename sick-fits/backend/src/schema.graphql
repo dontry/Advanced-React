@@ -4,6 +4,10 @@ type User {
   name: String!
 }
 
+type SuccessMessage {
+  message: String!
+}
+
 type Mutation {
   hi: String
   createDog(name: String!): Dog
@@ -11,6 +15,8 @@ type Mutation {
   updateItem(data: ItemUpdateInput, where: ItemWhereUniqueInput!): Item
   deleteItem(where: ItemWhereUniqueInput!): Item
   signup(name: String!, email: String!, password: String!): User
+  signin(email: String!, password: String!): User
+  signout: SuccessMessage
 }
 
 # use the argument types from prisma.graphql

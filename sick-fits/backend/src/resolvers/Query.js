@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const { forwardTo } = require("prisma-binding");
 const Query = {
   dogs(parent, args, ctx, info) {

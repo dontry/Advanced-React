@@ -1,4 +1,5 @@
-import moduleName from "module";
+import Signup from "../components/Signup";
+import Signin from "../components/Signin";
 
 const Columns = styled.div`
   display: grid;
@@ -6,6 +7,11 @@ const Columns = styled.div`
   grid-gap: 20px;
 `;
 
-const SingupPage = props => <Columns />;
+const SingupPage = props => (
+  <Columns>
+    <Signup />
+    <Signin />
+  </Columns>
+);
 
 export default SignupPage;
