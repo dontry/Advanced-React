@@ -13,6 +13,12 @@ type Mutation {
   signup(name: String!, email: String!, password: String!): User
   signin(email: String!, password: String!): User
   signout: SuccessMessage
+  requestReset(email: String!): SuccessMessage
+  resetPassword(
+    resetToken: String!
+    password: String!
+    confirmPassword: String!
+  ): User!
 }
 
 # use the argument types from prisma.graphql
