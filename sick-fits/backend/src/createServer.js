@@ -15,6 +15,11 @@ function createServer() {
     resolverValidationOptions: {
       requireResolversForResolveType: false
     },
+    playground: {
+      settings: {
+        "request.credentials": "include"
+      }
+    },
     //access database via resolvers, expose the db instance to every request
     context: request => ({ ...request, db })
   });

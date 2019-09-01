@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const { transporter, resetPasswordTemplate } = require("../mailer");
+const { checkPermission } = require("../utils");
 
 const Mutations = {
   createDog(parent, args, ctx, info) {
@@ -12,20 +13,23 @@ const Mutations = {
     return newDog;
   },
   async createItem(parent, args, ctx, info) {
-    const { title, description, price, image, largeImage } = args.data;
-    console.log(args);
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
 
     const item = await ctx.db.mutation.createItem(
       {
         data: {
-          title,
-          description,
-          price,
-          image,
-          largeImage
+          // This is how to create a relationship between the Item and the User
+          user: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
+          ...args.data
         }
       },
-      info // backend needs to access 'prisma query' info  for actual query
+      info
     );
     return item;
   },
@@ -43,13 +47,26 @@ const Mutations = {
     console.log(`updated item: ${JSON.stringify(item, null, 2)}`);
     return item;
   },
+
   async deleteItem(parent, args, ctx, info) {
-    console.log(args);
+    // 1. check if user logged in
+    if (!ctx.request.user) {
+      throw new Error("Please log in.");
+    }
+    const hasPermission = checkPermission(ctx.request.user, [
+      "ADMIN",
+      "ITEM_DELETE"
+    ]);
+    // 1. Find the item
     const { where } = args;
-    //1. Find the item
-    const item = await ctx.db.query.item({ where }, `{id, title}`);
-    // 2. Check if they own that item, or have the permissions
-    // TODO
+    const item = await ctx.db.query.item({ where }, `{ id title user { id }}`);
+
+    // // 2. Check if they own that item, or have the permissions
+    const hasOwnership = item.user && item.user.id === ctx.request.userId;
+    if (!hasOwnership || !hasPermission) {
+      throw new Error("Sorry, you are not authorized to delete the item.");
+    }
+
     // 3. Delete it!
     return ctx.db.mutation.deleteItem({ where }, info);
   },
@@ -156,6 +173,31 @@ const Mutations = {
     // 6.  Set JWT token cookie
     ctx.response.cookie("token", token);
     // 7. return updated user
+    return updatedUser;
+  },
+  async updatePermissions(parent, args, ctx, info) {
+    // 1. check if the user logged in
+    if (!ctx.request.user) {
+      throw new Error("Please log in.");
+    }
+
+    // 2. check user permissions
+    const hasPermission = checkPermission(ctx.request.user, [
+      "ADMIN",
+      "PERMISSION_UPDATE"
+    ]);
+
+    // 3. update user permissions
+    const updatedUser = await ctx.db.mutation.updateUser(
+      {
+        where: { id: args.userId },
+        data: {
+          permissions: { set: args.permissions }
+        }
+      },
+      info
+    );
+
     return updatedUser;
   }
 };

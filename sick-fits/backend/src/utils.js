@@ -13,6 +13,8 @@ function checkPermission(user, permissionsNeeded) {
 
       ${user.permissions}
       `);
+  } else {
+    return true;
   }
 }
 

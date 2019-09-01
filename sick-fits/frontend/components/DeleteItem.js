@@ -9,16 +9,14 @@ const DELETE_ITEM_MUTATION = gql`
   mutation DELETE_ITEM_MUTATION($id: ID!) {
     deleteItem(where: { id: $id }) {
       id
-      title
     }
   }
 `;
 
 const DeleteItem = ({ id, children }) => {
-  const handleDelete = async (e, deleteItemMutation) => {
+  const handleDelete = async (e, deleteItem) => {
     if (window.confirm("Do you want to delete this item?")) {
-      const res = await deleteItemMutation();
-      console.log("Deleted!!");
+      const res = await deleteItem();
     }
   };
   //Sometimes when you perform a mutation, your GraphQL server and your Apollo cache become out of sync. This happens when the update you're performing depends on data that is already in the cache
@@ -35,10 +33,13 @@ const DeleteItem = ({ id, children }) => {
   return (
     <Mutation
       mutation={DELETE_ITEM_MUTATION}
-      variables={{ id }}
+      variables={{ id: id }}
       update={updateCache}>
       {(deleteItem, { loading, error }) => {
-        if (error) <ErrorMessage>{error.message}</ErrorMessage>;
+        console.error(error);
+        if (error) {
+          window.alert("Delete item error");
+        }
         return (
           <button onClick={e => handleDelete(e, deleteItem)}>{children}</button>
         );
