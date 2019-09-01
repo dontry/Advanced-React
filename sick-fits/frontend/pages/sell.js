@@ -1,10 +1,10 @@
 import CreateItem from "../components/CreateItem";
 import Auth from "../components/Auth";
 
-const Sell = props => (
+const SellPage = props => (
   <Auth>
     <CreateItem />
   </Auth>
 );
 
-export default Sell;
+export default SellPage;

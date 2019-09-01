@@ -20,6 +20,16 @@ server.express.use((req, res, next) => {
 });
 
 // TODO: populate current user
+server.express.use(async (req, res, next) => {
+  if (req.userId) {
+    const user = await db.query.user(
+      { where: { id: req.userId } },
+      `{id, permissions, email, name}`
+    );
+    req.user = user;
+  }
+  next();
+});
 
 server.start(
   {

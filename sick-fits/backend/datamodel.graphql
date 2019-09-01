@@ -1,6 +1,10 @@
 enum Permission {
   ADMIN
   USER
+  ITEM_CREATE
+  ITEM_UPDATE
+  ITEMDELETE
+  PERMISSION_UPDATE
 }
 type User {
   id: ID! @id

@@ -42,6 +42,7 @@ type Query {
     last: Int
   ): ItemConnection!
   me: User
+  users: [User!]!
 }
 type Dog {
   name: String!

@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/mccoy018/new-sick-fits/dev
-# timestamp: Tue Aug 27 2019 23:24:54 GMT+1000 (Australian Eastern Standard Time)
+# timestamp: Sat Aug 31 2019 00:11:20 GMT+1000 (Australian Eastern Standard Time)
 
 type AggregateItem {
   count: Int!
@@ -418,6 +418,10 @@ type PageInfo {
 enum Permission {
   ADMIN
   USER
+  ITEM_CREATE
+  ITEM_UPDATE
+  ITEMDELETE
+  PERMISSION_UPDATE
 }
 
 type Query {
