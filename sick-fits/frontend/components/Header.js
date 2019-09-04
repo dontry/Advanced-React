@@ -1,9 +1,10 @@
 import Link from "next/link";
 import styled from "styled-components";
+import { Query } from "react-apollo";
 import NProgress from "nprogress";
 import Router from "next/router";
 import Nav from "./Nav";
-// import Cart from "./Cart";
+import Cart from "./Cart";
 // import Search from "./Search";
 
 Router.onRouteChangeStart = () => {
@@ -66,7 +67,7 @@ const Header = () => (
       <Nav />
     </div>
     <div className="sub-bar">{/* <Search /> */}</div>
-    {/* <Cart /> */}
+    <Cart />
   </StyledHeader>
 );
 

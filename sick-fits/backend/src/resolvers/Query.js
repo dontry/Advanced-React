@@ -13,7 +13,10 @@ const Query = {
   item: forwardTo("db"),
   itemsConnection: forwardTo("db"),
   me(parent, args, ctx, info) {
-    return ctx.request.user;
+    if (!ctx.request.userId) {
+      return null;
+    }
+    return ctx.db.query.user({ where: { id: ctx.request.userId } }, info);
   },
   async users(parent, args, ctx, info) {
     // 1. check if user logged in

@@ -199,6 +199,65 @@ const Mutations = {
     );
 
     return updatedUser;
+  },
+  async addToCart(parent, args, ctx, info) {
+    // 1. Check user logged in
+    if (!ctx.request.userId) {
+      throw new Error("Please log in.");
+    }
+    // 2. Get cart item from the user;
+    const [existingCartItem] = await ctx.db.query.cartItems(
+      {
+        where: {
+          item: { id: args.id },
+          user: { id: ctx.request.userId }
+        }
+      },
+      info
+    );
+    console.log(existingCartItem);
+    if (existingCartItem) {
+      return ctx.db.mutation.updateCartItem(
+        {
+          where: { id: existingCartItem.id },
+          data: { quantity: existingCartItem.quantity + 1 }
+        },
+        info
+      );
+    } else {
+      return ctx.db.mutation.createCartItem(
+        {
+          data: {
+            user: {
+              connect: { id: ctx.request.userId }
+            },
+            item: {
+              connect: { id: args.id }
+            }
+          }
+        },
+        info
+      );
+    }
+  },
+  async removeFromCart(parent, args, ctx, info) {
+    // 1. find cart item
+    const cartItem = await ctx.db.query.cartItem(
+      { where: { id: args.id } },
+      `{id, user { id }}`
+    );
+
+    if (!cartItem) {
+      throw new Error("Cart item not found!");
+    }
+
+    // 2. check if cart item is owned by user
+    if (cartItem.user.id !== ctx.request.userId) {
+      throw new Error("Access denied. You don't own the cart item");
+    }
+
+    // 3. delete cart item
+    return await ctx.db.query.deleteItem({ where: { id: args.id } });
   }
 };
 
