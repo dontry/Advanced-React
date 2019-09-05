@@ -14,10 +14,10 @@ const ADD_TO_CART_MUTATION = gql`
 
 const AddToCart = ({ id }) => {
   return (
-    <Mutationo
+    <Mutation
       mutation={ADD_TO_CART_MUTATION}
       variables={{ id }}
-      refetchQueries={{ query: CURRENT_USER_QUERY }}>
+      refetchQueries={[{ query: CURRENT_USER_QUERY }]}>
       {(addToCart, { loading }) => {
         return (
           <button disabled={loading} onClick={addToCart}>

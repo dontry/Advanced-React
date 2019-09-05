@@ -4,6 +4,7 @@ import { Mutation } from "react-apollo";
 import { LOCAL_STATE_QUERY, TOGGLE_CART_MUTATION } from "./Cart";
 import User from "./User";
 import Signout from "./Signout";
+import CartCount from "./CartCount";
 
 const Nav = () => (
   <User>
@@ -30,7 +31,7 @@ const Nav = () => (
               )}
               <Mutation
                 mutation={TOGGLE_CART_MUTATION}
-                refetchQueries={{ query: LOCAL_STATE_QUERY }}>
+                refetchQueries={[{ query: LOCAL_STATE_QUERY }]}>
                 {toggleCart => (
                   <button
                     onClick={() => {
@@ -38,6 +39,11 @@ const Nav = () => (
                       toggleCart();
                     }}>
                     My Cart{" "}
+                    <CartCount
+                      count={me.cart.reduce((tally, cartItem) => {
+                        return tally + cartItem.quantity;
+                      }, 0)}
+                    />
                   </button>
                 )}
               </Mutation>

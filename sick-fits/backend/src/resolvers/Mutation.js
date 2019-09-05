@@ -201,6 +201,7 @@ const Mutations = {
     return updatedUser;
   },
   async addToCart(parent, args, ctx, info) {
+    console.log("add to cart:", args.id);
     // 1. Check user logged in
     if (!ctx.request.userId) {
       throw new Error("Please log in.");
@@ -215,8 +216,9 @@ const Mutations = {
       },
       info
     );
-    console.log(existingCartItem);
+    console.log("existingCartItem", existingCartItem);
     if (existingCartItem) {
+      console.log("This item is already in their cart");
       return ctx.db.mutation.updateCartItem(
         {
           where: { id: existingCartItem.id },
@@ -225,6 +227,7 @@ const Mutations = {
         info
       );
     } else {
+      console.log("create new item");
       return ctx.db.mutation.createCartItem(
         {
           data: {
@@ -241,6 +244,7 @@ const Mutations = {
     }
   },
   async removeFromCart(parent, args, ctx, info) {
+    console.log("cart item ID", args.id);
     // 1. find cart item
     const cartItem = await ctx.db.query.cartItem(
       { where: { id: args.id } },
@@ -257,7 +261,10 @@ const Mutations = {
     }
 
     // 3. delete cart item
-    return await ctx.db.query.deleteItem({ where: { id: args.id } });
+    return await ctx.db.mutation.deleteCartItem(
+      { where: { id: args.id } },
+      info
+    );
   }
 };
 
