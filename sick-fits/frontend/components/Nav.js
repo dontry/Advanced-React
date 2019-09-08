@@ -29,9 +29,7 @@ const Nav = () => (
               {me.permissions.includes("ADMIN") && (
                 <Link href="/permission">Permissions</Link>
               )}
-              <Mutation
-                mutation={TOGGLE_CART_MUTATION}
-                refetchQueries={[{ query: LOCAL_STATE_QUERY }]}>
+              <Mutation mutation={TOGGLE_CART_MUTATION}>
                 {toggleCart => (
                   <button
                     onClick={() => {
