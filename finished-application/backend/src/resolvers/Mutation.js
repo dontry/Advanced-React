@@ -309,7 +309,7 @@ const Mutations = {
         quantity: cartItem.quantity,
         user: { connect: { id: userId } }
       };
-      delete orderItem.id;
+      delete orderItem.id; //delete cart item id
       return orderItem;
     });
 
@@ -322,6 +322,7 @@ const Mutations = {
         user: { connect: { id: userId } }
       }
     });
+
     // 6. Clean up - clear the users cart, delete cartItems
     const cartItemIds = user.cart.map(cartItem => cartItem.id);
     await ctx.db.mutation.deleteManyCartItems({

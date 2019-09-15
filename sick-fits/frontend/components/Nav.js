@@ -11,7 +11,7 @@ const Nav = () => (
     {({ data }) => {
       const me = data ? data.me : null;
       return (
-        <NavStyles>
+        <NavStyles data-test="nav">
           <Link href="/items">
             <a>Items</a>
           </Link>
@@ -33,10 +33,9 @@ const Nav = () => (
                 {toggleCart => (
                   <button
                     onClick={() => {
-                      console.log("toggleCart");
                       toggleCart();
                     }}>
-                    My Cart{" "}
+                    My Cart
                     <CartCount
                       count={me.cart.reduce((tally, cartItem) => {
                         return tally + cartItem.quantity;
@@ -48,7 +47,7 @@ const Nav = () => (
               <Signout />
             </>
           ) : (
-            <Link href="/signup">
+            <Link href="/signin">
               <a>Sign In</a>
             </Link>
           )}

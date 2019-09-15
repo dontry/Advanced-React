@@ -4,6 +4,7 @@ const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const { transporter, resetPasswordTemplate } = require("../mailer");
 const { checkPermission } = require("../utils");
+const stripe = require("../stripe");
 
 const Mutations = {
   createDog(parent, args, ctx, info) {
@@ -265,6 +266,66 @@ const Mutations = {
       { where: { id: args.id } },
       info
     );
+  },
+  async createOrder(parent, args, ctx, info) {
+    console.log("create order");
+    // 1. Checked user logged in
+    const { userId } = ctx.request;
+    if (!userId) throw new Error("Please login to complete the checkout");
+    const user = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{ 
+        id
+        name
+        email
+        cart {
+          id
+          quantity
+          item {title price id description largeImage image}
+        }
+    }`
+    );
+    // 2. calculate the total price of the cart
+    const total = user.cart.reduce(
+      (tally, cartItem) => tally + cartItem.quantity * cartItem.item.price,
+      0
+    );
+    // 3. Create the stripe charge
+    const charge = await stripe.charges.create({
+      amount: total,
+      currency: "USD",
+      source: args.token
+    });
+    // 4. Convert the cart items to order items
+    const orderItems = user.cart.map(cartItem => {
+      const orderItem = {
+        ...cartItem.item,
+        quantity: cartItem.quantity,
+        user: { connect: { id: userId } }
+      };
+      delete orderItem.id;
+      return orderItem;
+    });
+
+    // 5. Create the order
+    console.log("set order");
+    const order = await ctx.db.mutation.createOrder({
+      data: {
+        total: charge.amount,
+        charge: charge.id,
+        items: { create: orderItems },
+        user: { connect: { id: userId } }
+      }
+    });
+    // 6. Clean up the cart and delete cart items
+    const cartItemIds = user.cart.map(cartItem => cartItem.id);
+    // 7. Return the order to the client
+    await ctx.db.mutation.deleteManyCartItems({
+      where: { id_in: cartItemIds }
+    });
+    console.log("order:", order);
+    // 8. return the order to the client
+    return order;
   }
 };
 

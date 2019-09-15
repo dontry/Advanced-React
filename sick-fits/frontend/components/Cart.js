@@ -42,7 +42,6 @@ const Cart = () => {
         const me = user.data.me;
         if (!me) return null;
         const { toggleCart } = mutation;
-        console.log("localState:", localState.data);
         return (
           <CartStyles open={localState.data.cartOpen}>
             <header>

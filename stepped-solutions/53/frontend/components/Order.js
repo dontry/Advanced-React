@@ -54,7 +54,7 @@ class Order extends React.Component {
                 <span>Charge</span>
                 <span>{order.charge}</span>
               </p>
-              <p>
+              <pd
                 <span>Date</span>
                 <span>{format(order.createdAt, 'MMMM d, YYYY h:mm a')}</span>
               </p>
