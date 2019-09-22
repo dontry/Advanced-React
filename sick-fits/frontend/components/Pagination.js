@@ -5,7 +5,7 @@ import Head from "next/head";
 import Link from "next/link";
 import PaginationStyles from "./styles/PaginationStyles";
 import Error from "./ErrorMessage";
-import { perPage } from "../config";
+import { perPage as PER_PAGE } from "../config";
 
 export const PAGINATION_QUERY = gql`
   query PAGINATION_QUERY {
@@ -17,7 +17,7 @@ export const PAGINATION_QUERY = gql`
   }
 `;
 
-const Pagination = props => {
+const Pagination = ({ page, perPage = PER_PAGE }) => {
   return (
     <Query query={PAGINATION_QUERY}>
       {({ data, loading, error }) => {
@@ -25,9 +25,8 @@ const Pagination = props => {
         if (error) return <Error error={error} />;
         const count = data.itemsConnection.aggregate.count;
         const pages = Math.ceil(count / perPage);
-        const page = props.page;
         return (
-          <PaginationStyles>
+          <PaginationStyles data-test="pagination">
             <Head>
               <title>
                 Sick Fits - Page {page} of {pages}
@@ -36,7 +35,7 @@ const Pagination = props => {
             <Link
               prefetch
               href={{ pathname: "items", query: { page: page - 1 } }}>
-              <a className="prev" aria-disabled={page <= 0}>
+              <a className="prev" aria-disabled={page <= 1}>
                 ← Prev
               </a>
             </Link>
@@ -47,7 +46,7 @@ const Pagination = props => {
             <Link
               prefetch
               href={{ pathname: "items", query: { page: page + 1 } }}>
-              <a className="prev" aria-disabled={page >= pages}>
+              <a className="next" aria-disabled={page >= pages}>
                 Next →
               </a>
             </Link>

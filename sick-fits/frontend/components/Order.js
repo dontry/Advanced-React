@@ -7,8 +7,8 @@ import OrderStyles from "./styles/OrderStyles";
 import formatMoney from "../lib/formatMoney";
 import { format } from "date-fns";
 
-const SINGLE_ORDER_QUERY = gql`
-  query SINGLE_ORDER_QUERY($id: ID!) {
+export const SINGLE_ORDER_QUERY = gql`
+  query SINGLE_ORDER_QUERY($id: ID! = "123") {
     order(id: $id) {
       id
       items {
@@ -37,7 +37,7 @@ const Order = ({ id }) => {
         if (loading) return <p>Loading...</p>;
         const order = data.order;
         return (
-          <OrderStyles>
+          <OrderStyles data-test="order">
             <Head>
               <title>Sick Fits - Order {order.id}</title>
             </Head>

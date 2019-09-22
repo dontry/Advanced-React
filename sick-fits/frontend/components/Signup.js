@@ -1,10 +1,10 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import Form from "./styles/Form";
 import Error from "./ErrorMessage";
 
-const SIGNUP_MUTATION = gql`
+export const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
     $email: String!
     $name: String!

@@ -8,7 +8,7 @@ import formatMoney from "../lib/formatMoney";
 import { ALL_ITEMS_QUERY } from "./Items";
 import Error from "./ErrorMessage";
 
-const CREATE_ITEM_MUTATION = gql`
+export const CREATE_ITEM_MUTATION = gql`
   mutation CREATE_ITEM_MUTATION(
     $title: String!
     $description: String!
@@ -45,11 +45,10 @@ class CreateItem extends Component {
     this.setState({ [name]: val });
   };
 
-  handleSubmit = createItem => async e => {
+  handleSubmit = async (e, createItem) => {
     e.preventDefault();
 
     // call the mutation
-
     const res = await createItem();
     Router.push({ pathname: "/item", query: { id: res.data.createItem.id } });
   };
@@ -79,11 +78,13 @@ class CreateItem extends Component {
     const { title, description, price, image } = this.state;
     return (
       <Mutation
-        refetchQueries={[{ query: ALL_ITEMS_QUERY }]}
+        // refetchQueries={[{ query: ALL_ITEMS_QUERY }]}
         mutation={CREATE_ITEM_MUTATION}
         variables={this.state}>
         {(createItem, { loading, error }) => (
-          <Form onSubmit={this.handleSubmit(createItem)}>
+          <Form
+            data-test="form"
+            onSubmit={e => this.handleSubmit(e, createItem)}>
             <Error error={error} />
             {/* use fieldset disabled attribute to stop user from editing when loading */}
             <fieldset disabled={loading} aria-busy={loading}>

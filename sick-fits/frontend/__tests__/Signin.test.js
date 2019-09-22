@@ -31,7 +31,6 @@ describe("<Signin />", () => {
     wrapper.update();
     expect(wrapper.text()).toContain("Sign In with your account");
     const SignIn = wrapper.find("Signin");
-    console.log(SignIn.debug());
     expect(SignIn.exists()).toBe(true);
   });
 });
